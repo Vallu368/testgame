@@ -10,7 +10,8 @@ public class PlayerRunState : MovementBaseState
     }
     public override void UpdateState(MovementStateManager movement)
     {
-        if(Input.GetKeyUp(KeyCode.LeftShift)) ExitState(movement, movement.walk);
+        if (movement.IsGrounded() && Input.GetKeyDown(KeyCode.Space)) ExitState(movement, movement.jump);
+        if (Input.GetKeyUp(KeyCode.LeftShift)) ExitState(movement, movement.walk);
         else if (movement.dir.magnitude < 0.01f) ExitState(movement, movement.idle);
 
         if (movement.verticalInput < 0) movement.currentMoveSpeed = movement.runBackSpeed;

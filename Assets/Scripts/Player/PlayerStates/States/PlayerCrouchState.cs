@@ -12,6 +12,7 @@ public class PlayerCrouchState : MovementBaseState
     {
         if (Input.GetKey(KeyCode.LeftShift)) ExitState(movement, movement.run);
 
+        if (movement.IsGrounded() && Input.GetKeyDown(KeyCode.Space)) ExitState(movement, movement.jump);
 
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {

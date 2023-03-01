@@ -8,6 +8,7 @@ public class MovementStateManager : MonoBehaviour
     public float walkSpeed = 3, walkBackSpeed = 2;
     public float runSpeed = 7, runBackSpeed = 5;
     public float crouchSpeed = 2, crouchBackSpeed = 1;
+    public float jumpSpeed = 3;
 
     [HideInInspector] public Vector3 dir;
     [HideInInspector] public float horizontalInput, verticalInput;
@@ -19,13 +20,16 @@ public class MovementStateManager : MonoBehaviour
     Vector3 spherePos;
 
     [SerializeField] float gravity = -9.81f;
-    Vector3 velocity;
+    public Vector3 velocity;
+    public float jumpForce;
 
      MovementBaseState currentState;
     public PlayerIdleState idle = new PlayerIdleState();
     public PlayerWalkState walk = new PlayerWalkState();
     public PlayerRunState run = new PlayerRunState();
     public PlayerCrouchState crouch = new PlayerCrouchState();
+    public PlayerJumpState jump = new PlayerJumpState();
+
 
     [HideInInspector] public Animator anim;
 
@@ -64,7 +68,7 @@ public class MovementStateManager : MonoBehaviour
 
         controller.Move(dir.normalized * currentMoveSpeed * Time.deltaTime);
     }
-    bool IsGrounded()
+    public bool IsGrounded()
     {
         spherePos = new Vector3(transform.position.x, transform.position.y - groundYOffset, transform.position.z);
         if (Physics.CheckSphere(spherePos, controller.radius - 0.05f, groundMask)) return true;
@@ -74,11 +78,13 @@ public class MovementStateManager : MonoBehaviour
     {
         if(!IsGrounded())
         {
+            anim.SetBool("isGrounded", false);
             velocity.y += gravity * Time.deltaTime;
         }
         else if(velocity.y < 0)
         {
             velocity.y = -2;
+            anim.SetBool("isGrounded", true);
         }
         controller.Move(velocity * Time.deltaTime);
     }

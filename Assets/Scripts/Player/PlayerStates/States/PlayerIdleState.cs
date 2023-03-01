@@ -15,7 +15,9 @@ public class PlayerIdleState : MovementBaseState
             if (Input.GetKey(KeyCode.LeftShift)) movement.SwitchState(movement.run);
             else movement.SwitchState(movement.walk);
         }
+        if (movement.IsGrounded() && Input.GetKeyDown(KeyCode.Space)) movement.SwitchState(movement.jump);
         if (Input.GetKeyDown(KeyCode.LeftControl)) movement.SwitchState(movement.crouch);
+
 
 
 
